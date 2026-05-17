@@ -1,50 +1,48 @@
-'use client';
+"use client";
 
-import { Forgot_pass_action } from '@/Actions/Auth/Forgot_password';
-import Link from 'next/link';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { FiMail, FiArrowLeft, FiCheck } from 'react-icons/fi';
+import { Forgot_pass_action } from "@/Actions/Auth/Forgot_password";
+import Link from "next/link";
+import { useState } from "react";
+import { toast } from "sonner";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { FiMail, FiArrowLeft, FiCheck } from "react-icons/fi";
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [loading ,setLoading]  = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit =async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically send a reset password email
     setLoading(true);
     // Reset password requested for email
-  
-     const res  = await   Forgot_pass_action({email})
-     if(res.status == 200){
-      toast.success(res.message)
+
+    const res = await Forgot_pass_action({ email });
+    if (res.status == 200) {
+      toast.success(res.message);
       setLoading(false);
       setIsSubmitted(true);
-     }else{
-      toast.error(res.message)
+    } else {
+      toast.error(res.message);
       setLoading(false);
-     }
+    }
   };
 
-
-  
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-[#0a0a12] dark:to-[#161622] text-gray-800 dark:text-[#e0e0e0] transition-colors duration-300 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Mobile Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden flex justify-center mb-6"
         >
           <div className="w-16 h-16 relative">
             <Image
-              src="/Logo2.jpg"
-              alt="StudyAI Logo"
+              src="/Logo3.png"
+              alt="TutorMind Logo"
               fill
               className="rounded-full object-cover border-4 border-white dark:border-[#2e2e3a] shadow-md"
             />
@@ -52,7 +50,7 @@ export default function ForgotPassword() {
         </motion.div>
 
         {/* Forgot Password Card */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -63,20 +61,20 @@ export default function ForgotPassword() {
             <div className="hidden md:flex justify-center mb-4">
               <div className="w-16 h-16 relative">
                 <Image
-                  src="/Logo2.jpg"
-                  alt="StudyAI Logo"
+                  src="/Logo3.png"
+                  alt="TutorMind Logo"
                   fill
                   className="rounded-full object-cover border-4 border-white dark:border-[#2e2e3a] shadow-md"
                 />
               </div>
             </div>
             <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
-              StudyAI
+              TutorMind
             </h1>
           </div>
 
           {isSubmitted ? (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-center"
@@ -84,9 +82,15 @@ export default function ForgotPassword() {
               <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full mb-6 bg-gradient-to-r from-green-400 to-emerald-500 shadow-lg">
                 <FiCheck className="h-8 w-8 text-white" />
               </div>
-              <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">Email Sent Successfully!</h2>
+              <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">
+                Email Sent Successfully!
+              </h2>
               <p className="mb-6 text-gray-600 dark:text-[#8a8a9b]">
-                We've sent a password reset link to <span className="font-semibold text-indigo-600 dark:text-indigo-400">{email}</span>. Please check your inbox and follow the instructions.
+                We've sent a password reset link to{" "}
+                <span className="font-semibold text-indigo-600 dark:text-indigo-400">
+                  {email}
+                </span>
+                . Please check your inbox and follow the instructions.
               </p>
               <motion.div
                 whileHover={{ scale: 1.02 }}
@@ -103,14 +107,20 @@ export default function ForgotPassword() {
             </motion.div>
           ) : (
             <>
-              <h2 className="text-2xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">Forgot your password?</h2>
+              <h2 className="text-2xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">
+                Forgot your password?
+              </h2>
               <p className="mb-6 text-gray-600 dark:text-[#8a8a9b]">
-                Enter your email address below and we'll send you a link to reset your password.
+                Enter your email address below and we'll send you a link to
+                reset your password.
               </p>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-1 text-gray-700 dark:text-[#e0e0e0]">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium mb-1 text-gray-700 dark:text-[#e0e0e0]"
+                  >
                     Email Address
                   </label>
                   <div className="relative">

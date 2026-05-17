@@ -1,31 +1,31 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { FiMail, FiArrowLeft, FiCheck, FiX, FiRefreshCw } from 'react-icons/fi';
-import { toast } from 'sonner';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { FiMail, FiArrowLeft, FiCheck, FiX, FiRefreshCw } from "react-icons/fi";
+import { toast } from "sonner";
+import axios from "axios";
 
 export default function VerifyEmail() {
   const [isLoading, setIsLoading] = useState(true);
   const [isVerified, setIsVerified] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isResending, setIsResending] = useState(false);
-  
+
   const searchParams = useSearchParams();
   const router = useRouter();
-  
-  const token = searchParams.get('token');
-  const email = searchParams.get('email');
+
+  const token = searchParams.get("token");
+  const email = searchParams.get("email");
 
   useEffect(() => {
     if (token && email) {
       verifyEmail();
     } else {
-      setError('Invalid verification link');
+      setError("Invalid verification link");
       setIsLoading(false);
     }
   }, [token, email]);
@@ -33,19 +33,23 @@ export default function VerifyEmail() {
   const verifyEmail = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/verify-email`, {
-        params: { token, email }
-      });
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/verify-email`,
+        {
+          params: { token, email },
+        },
+      );
 
       if (response.status === 200) {
         setIsVerified(true);
-        toast.success('Email verified successfully!');
+        toast.success("Email verified successfully!");
         setTimeout(() => {
-          router.push('/login');
+          router.push("/login");
         }, 3000);
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Verification failed';
+      const errorMessage =
+        error.response?.data?.message || "Verification failed";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -55,18 +59,22 @@ export default function VerifyEmail() {
 
   const resendVerification = async () => {
     if (!email) return;
-    
+
     try {
       setIsResending(true);
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_AUTH_API_URL}/resend-verification`, {
-        email
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_AUTH_API_URL}/resend-verification`,
+        {
+          email,
+        },
+      );
 
       if (response.status === 200) {
-        toast.success('Verification email sent! Please check your inbox.');
+        toast.success("Verification email sent! Please check your inbox.");
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to resend verification email';
+      const errorMessage =
+        error.response?.data?.message || "Failed to resend verification email";
       toast.error(errorMessage);
     } finally {
       setIsResending(false);
@@ -77,15 +85,15 @@ export default function VerifyEmail() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-[#0a0a12] dark:to-[#161622] text-gray-800 dark:text-[#e0e0e0] transition-colors duration-300 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Mobile Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden flex justify-center mb-6"
         >
           <div className="w-16 h-16 relative">
             <Image
-              src="/Logo2.jpg"
-              alt="StudyAI Logo"
+              src="/Logo3.png"
+              alt="TutorMind Logo"
               fill
               className="rounded-full object-cover border-4 border-white dark:border-[#2e2e3a] shadow-md"
             />
@@ -93,7 +101,7 @@ export default function VerifyEmail() {
         </motion.div>
 
         {/* Verification Card */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -104,15 +112,15 @@ export default function VerifyEmail() {
             <div className="hidden md:flex justify-center mb-4">
               <div className="w-16 h-16 relative">
                 <Image
-                  src="/Logo2.jpg"
-                  alt="StudyAI Logo"
+                  src="/Logo3.png"
+                  alt="TutorMind Logo"
                   fill
                   className="rounded-full object-cover border-4 border-white dark:border-[#2e2e3a] shadow-md"
                 />
               </div>
             </div>
             <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
-              StudyAI
+              TutorMind
             </h1>
             <p className="text-sm text-gray-600 dark:text-[#8a8a9b] mt-2">
               Your AI-Powered Learning Companion
@@ -121,7 +129,7 @@ export default function VerifyEmail() {
 
           {/* Loading State */}
           {isLoading && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-center"
@@ -134,7 +142,9 @@ export default function VerifyEmail() {
                   <FiRefreshCw className="h-8 w-8 text-white" />
                 </motion.div>
               </div>
-              <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">Verifying Your Email...</h2>
+              <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">
+                Verifying Your Email...
+              </h2>
               <p className="text-gray-600 dark:text-[#8a8a9b]">
                 Please wait while we verify your email address.
               </p>
@@ -148,7 +158,7 @@ export default function VerifyEmail() {
 
           {/* Success State */}
           {!isLoading && isVerified && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-center"
@@ -156,16 +166,19 @@ export default function VerifyEmail() {
               <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full mb-6 bg-gradient-to-r from-green-400 to-emerald-500 shadow-lg">
                 <FiCheck className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">Email Verified Successfully!</h2>
+              <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">
+                Email Verified Successfully!
+              </h2>
               <p className="mb-6 text-gray-600 dark:text-[#8a8a9b]">
-                Your email has been verified. You can now access all features of StudyAI.
+                Your email has been verified. You can now access all features of
+                TutorMind.
               </p>
-              
+
               {/* Success Info */}
               <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-4 mb-6 border-l-4 border-green-400">
                 <div className="text-left">
                   <p className="text-sm text-green-700 dark:text-green-400 font-medium mb-2">
-                    🎉 Welcome to StudyAI! You can now:
+                    🎉 Welcome to TutorMind! You can now:
                   </p>
                   <ul className="text-xs text-green-600 dark:text-green-400 space-y-1">
                     <li>• Take AI-powered quizzes and assessments</li>
@@ -199,7 +212,7 @@ export default function VerifyEmail() {
 
           {/* Error State */}
           {!isLoading && error && !isVerified && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-center"
@@ -207,11 +220,11 @@ export default function VerifyEmail() {
               <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full mb-6 bg-gradient-to-r from-red-400 to-pink-500 shadow-lg">
                 <FiX className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">Verification Failed</h2>
-              <p className="mb-6 text-gray-600 dark:text-[#8a8a9b]">
-                {error}
-              </p>
-              
+              <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">
+                Verification Failed
+              </h2>
+              <p className="mb-6 text-gray-600 dark:text-[#8a8a9b]">{error}</p>
+
               {/* Error Info Box */}
               <div className="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-lg p-4 mb-6 border-l-4 border-red-400">
                 <div className="text-left">
@@ -239,7 +252,11 @@ export default function VerifyEmail() {
                     <>
                       <motion.div
                         animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        transition={{
+                          duration: 1,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
                         className="mr-2"
                       >
                         <FiRefreshCw className="h-5 w-5" />
@@ -272,7 +289,7 @@ export default function VerifyEmail() {
 
           {/* No Token State */}
           {!isLoading && !token && !email && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-center"
@@ -280,11 +297,14 @@ export default function VerifyEmail() {
               <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full mb-6 bg-gradient-to-r from-yellow-400 to-orange-500 shadow-lg">
                 <FiMail className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">Email Verification Required</h2>
+              <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-[#e0e0e0]">
+                Email Verification Required
+              </h2>
               <p className="mb-6 text-gray-600 dark:text-[#8a8a9b]">
-                Please check your email for the verification link, or request a new one below.
+                Please check your email for the verification link, or request a
+                new one below.
               </p>
-              
+
               <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg p-4 mb-6 border-l-4 border-yellow-400">
                 <p className="text-sm text-yellow-700 dark:text-yellow-400 font-medium">
                   📧 Check your inbox and spam folder for the verification email
@@ -308,14 +328,20 @@ export default function VerifyEmail() {
         </motion.div>
 
         {/* Footer */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
           className="text-center mt-6"
         >
           <p className="text-sm text-gray-500 dark:text-[#6b6b7d]">
-            Need help? <Link href="/" className="text-indigo-600 dark:text-indigo-400 hover:underline">Contact Support</Link>
+            Need help?{" "}
+            <Link
+              href="/"
+              className="text-indigo-600 dark:text-indigo-400 hover:underline"
+            >
+              Contact Support
+            </Link>
           </p>
         </motion.div>
       </div>

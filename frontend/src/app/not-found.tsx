@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Home, ArrowLeft, Search } from 'lucide-react';
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Home, ArrowLeft, Search } from "lucide-react";
 
 export default function NotFound() {
   return (
@@ -12,8 +12,8 @@ export default function NotFound() {
         {/* Logo */}
         <div className="mb-8 flex justify-center">
           <Image
-            src="/Logo2.jpg"
-            alt="StudyAI Logo"
+            src="/Logo3.png"
+            alt="TutorMind Logo"
             width={80}
             height={80}
             className="rounded-xl shadow-lg"
@@ -29,7 +29,8 @@ export default function NotFound() {
             Page Not Found
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-lg">
-            Oops! The page you're looking for doesn't exist. It might have been moved, deleted, or you entered the wrong URL.
+            Oops! The page you're looking for doesn't exist. It might have been
+            moved, deleted, or you entered the wrong URL.
           </p>
         </div>
 
@@ -41,17 +42,17 @@ export default function NotFound() {
               Go Home
             </Button>
           </Link>
-          
+
           <div className="flex gap-3">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => window.history.back()}
               className="flex-1 py-3"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
               Go Back
             </Button>
-            
+
             {/* <Link href="/search" className="flex-1">
               <Button variant="outline" className="w-full py-3">
                 <Search className="mr-2 h-4 w-4" />
@@ -67,26 +68,26 @@ export default function NotFound() {
             Popular pages:
           </p>
           <div className="flex flex-wrap gap-2 justify-center">
-            <Link 
-              href="/summary" 
+            <Link
+              href="/summary"
               className="text-blue-600 dark:text-blue-400 hover:underline text-sm px-3 py-1 bg-blue-50 dark:bg-blue-900/20 rounded-full"
             >
               Summary
             </Link>
-            <Link 
-              href="/quiz_qna" 
+            <Link
+              href="/quiz_qna"
               className="text-blue-600 dark:text-blue-400 hover:underline text-sm px-3 py-1 bg-blue-50 dark:bg-blue-900/20 rounded-full"
             >
               Quiz&Q&A
             </Link>
-            <Link 
-              href="/current-affairs" 
+            <Link
+              href="/current-affairs"
               className="text-blue-600 dark:text-blue-400 hover:underline text-sm px-3 py-1 bg-blue-50 dark:bg-blue-900/20 rounded-full"
             >
               Current Affairs
             </Link>
-            <Link 
-              href="/interviews/new" 
+            <Link
+              href="/interviews/new"
               className="text-blue-600 dark:text-blue-400 hover:underline text-sm px-3 py-1 bg-blue-50 dark:bg-blue-900/20 rounded-full"
             >
               Interview Prep

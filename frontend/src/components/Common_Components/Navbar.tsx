@@ -37,7 +37,7 @@ interface NavbarProps {
 const Navbar = ({ isOpen, setIsOpen }: NavbarProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(
-    typeof window !== "undefined" ? window?.innerWidth : 1024
+    typeof window !== "undefined" ? window?.innerWidth : 1024,
   );
   const { name, email, avatar } = useUserStore();
   const pathname = usePathname();
@@ -124,7 +124,7 @@ const Navbar = ({ isOpen, setIsOpen }: NavbarProps) => {
           animate={{ opacity: 1 }}
         >
           <Image
-            src="/Logo2.jpg"
+            src="/Logo3.png"
             alt="StudyAI Logo"
             fill
             className="rounded-full object-cover border-2 border-white dark:border-gray-600 shadow-sm"
@@ -245,7 +245,9 @@ const Navbar = ({ isOpen, setIsOpen }: NavbarProps) => {
       >
         <div className="flex flex-col h-full">
           {/* Header section with logo and toggle */}
-          <div className={`${isOpen ? 'p-4' : 'p-2'} flex-shrink-0 border-b border-gray-200 dark:border-gray-700`}>
+          <div
+            className={`${isOpen ? "p-4" : "p-2"} flex-shrink-0 border-b border-gray-200 dark:border-gray-700`}
+          >
             {isOpen ? (
               <div className="flex items-center justify-between w-full">
                 <motion.div
@@ -255,7 +257,7 @@ const Navbar = ({ isOpen, setIsOpen }: NavbarProps) => {
                   className="relative w-10 h-10"
                 >
                   <Image
-                    src="/Logo2.jpg"
+                    src="/Logo3.png"
                     alt="StudyAI Logo"
                     fill
                     className="rounded-full object-cover border-2 border-white dark:border-gray-600 shadow-sm"
@@ -280,7 +282,7 @@ const Navbar = ({ isOpen, setIsOpen }: NavbarProps) => {
                 >
                   <div className="relative w-8 h-8">
                     <Image
-                      src="/Logo2.jpg"
+                      src="/Logo3.png"
                       alt="StudyAI Logo"
                       fill
                       className="rounded-full object-cover border-2 border-white dark:border-gray-600 shadow-sm"
@@ -292,7 +294,9 @@ const Navbar = ({ isOpen, setIsOpen }: NavbarProps) => {
           </div>
 
           <nav className="flex-1 flex flex-col justify-between">
-            <div className={`space-y-1 ${isOpen ? 'px-2' : 'px-1'} py-4  overflow-hidden flex-1`}>
+            <div
+              className={`space-y-1 ${isOpen ? "px-2" : "px-1"} py-4  overflow-hidden flex-1`}
+            >
               {navItems.map((item) => (
                 <motion.button
                   key={item.name}
@@ -302,7 +306,7 @@ const Navbar = ({ isOpen, setIsOpen }: NavbarProps) => {
                       setMobileMenuOpen(false);
                     }
                   }}
-                  className={`flex cursor-pointer items-center ${isOpen ? 'justify-start' : 'justify-center'} p-3 rounded-lg transition-colors w-full text-left ${
+                  className={`flex cursor-pointer items-center ${isOpen ? "justify-start" : "justify-center"} p-3 rounded-lg transition-colors w-full text-left ${
                     isActive(item.route)
                       ? "bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-200"
                       : "hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"

@@ -46,7 +46,7 @@ export const Forgot_Password = async (req: Request, res: Response): Promise<any>
         const templateParams = {
             email: email,
             link: resetUrl,
-            company_name: process.env.APP_NAME || 'StudyAI',
+            company_name: process.env.APP_NAME || 'TutorMind',
             website_link: process.env.CLIENT_URL || 'http://localhost:3000'
         };
 

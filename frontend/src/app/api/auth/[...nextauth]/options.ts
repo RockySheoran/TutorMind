@@ -66,6 +66,14 @@ const getEnvVar = (key: string): string => {
   return value;
 };
 
+const getOptionalEnvVar = (key: string): string | undefined => process.env[key];
+
+const GOOGLE_CLIENT_ID = getOptionalEnvVar("GOOGLE_CLIENT_ID");
+const GOOGLE_CLIENT_SECRET = getOptionalEnvVar("GOOGLE_CLIENT_SECRET");
+const GITHUB_CLIENT_ID = getOptionalEnvVar("GITHUB_CLIENT_ID");
+const GITHUB_CLIENT_SECRET = getOptionalEnvVar("GITHUB_CLIENT_SECRET");
+const NEXTAUTH_SECRET = getEnvVar("NEXTAUTH_SECRET");
+
 // 3. Session Duration (5 days in seconds)
 const SESSION_DURATION = 5 * 24 * 60 * 60;
 
@@ -104,16 +112,24 @@ export const authOptions: NextAuthOptions = {
     }),
 
     // Google Provider
-    GoogleProvider({
-      clientId: getEnvVar("GOOGLE_CLIENT_ID"),
-      clientSecret: getEnvVar("GOOGLE_CLIENT_SECRET"),
-    }),
+    ...(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET
+      ? [
+        GoogleProvider({
+          clientId: GOOGLE_CLIENT_ID,
+          clientSecret: GOOGLE_CLIENT_SECRET,
+        }),
+      ]
+      : []),
 
     // GitHub Provider
-    GitHubProvider({
-      clientId: getEnvVar("GITHUB_CLIENT_ID"),
-      clientSecret: getEnvVar("GITHUB_CLIENT_SECRET"),
-    }),
+    ...(GITHUB_CLIENT_ID && GITHUB_CLIENT_SECRET
+      ? [
+        GitHubProvider({
+          clientId: GITHUB_CLIENT_ID,
+          clientSecret: GITHUB_CLIENT_SECRET,
+        }),
+      ]
+      : []),
 
   ],
 
@@ -166,7 +182,7 @@ export const authOptions: NextAuthOptions = {
             authId: user.id,
             profile: user.image
           });
-         
+
 
           if (response.data?.userData) {
             // Update user object with backend response data
@@ -236,9 +252,9 @@ export const authOptions: NextAuthOptions = {
   },
 
   jwt: {
-    secret: getEnvVar("NEXTAUTH_SECRET"),
+    secret: NEXTAUTH_SECRET,
     maxAge: SESSION_DURATION,
   },
 
-  secret: getEnvVar("NEXTAUTH_SECRET"),
+  secret: NEXTAUTH_SECRET,
 }

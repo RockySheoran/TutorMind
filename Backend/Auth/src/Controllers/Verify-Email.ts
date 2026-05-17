@@ -97,7 +97,7 @@ export const Resend_Verification = async (req: Request, res: Response): Promise<
                 to_email: email,
                 to_name: user.name,
                 verification_link: verificationUrl,
-                company_name: process.env.APP_NAME || 'StudyAI',
+                company_name: process.env.APP_NAME || 'TutorMind',
                 website_link: process.env.CLIENT_URL || 'http://localhost:3000'
             };
 

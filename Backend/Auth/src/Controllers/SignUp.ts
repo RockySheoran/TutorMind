@@ -54,7 +54,7 @@ export const SignUp = async (req: Request, res: Response): Promise<any> => {
                     to_email: email,
                     to_name: name,
                     verification_link: verificationUrl,
-                    company_name: process.env.APP_NAME || 'StudyAI',
+                    company_name: process.env.APP_NAME || 'TutorMind',
                     website_link: process.env.CLIENT_URL || 'http://localhost:3000'
                 };
                 console.log(
@@ -129,7 +129,7 @@ export const SignUp = async (req: Request, res: Response): Promise<any> => {
                 to_email: email,
                 to_name: name,
                 verification_link: verificationUrl,
-                company_name: process.env.APP_NAME || 'StudyAI',
+                company_name: process.env.APP_NAME || 'TutorMind',
                 website_link: process.env.CLIENT_URL || 'http://localhost:3000'
             };
             console.log(process.env.EMAILJS_SERVICE_ID1!,

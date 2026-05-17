@@ -1,37 +1,36 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { 
-  FiEye, 
-  FiEyeOff, 
-  FiLogIn, 
-  FiLoader, 
-  FiMail, 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  FiEye,
+  FiEyeOff,
+  FiLogIn,
+  FiLoader,
+  FiMail,
   FiLock,
   FiAlertCircle,
-  FiX
-} from 'react-icons/fi';
-import { FcGoogle } from 'react-icons/fc';
-import { FaGithub } from 'react-icons/fa';
-import { toast } from 'sonner';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { performCompleteCleanup } from '@/lib/utils/storageCleanup';
-import { useUserStore } from '@/lib/Store/userStore';
+  FiX,
+} from "react-icons/fi";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+import { toast } from "sonner";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { performCompleteCleanup } from "@/lib/utils/storageCleanup";
+import { useUserStore } from "@/lib/Store/userStore";
 
 // Define Zod schema for form validation
 const loginSchema = z.object({
-  email: z.string()
-    .min(1, "Email is required")
-    .email("Invalid email address"),
-  password: z.string()
+  email: z.string().min(1, "Email is required").email("Invalid email address"),
+  password: z
+    .string()
     .min(1, "Password is required")
-    .min(8, "Password must be at least 8 characters")
+    .min(8, "Password must be at least 8 characters"),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -40,23 +39,23 @@ export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-const { clearUser, clearToken } = useUserStore();
+  const { clearUser, clearToken } = useUserStore();
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
-    reset
+    reset,
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema)
+    resolver: zodResolver(loginSchema),
   });
-  useEffect(()=>{
-    const fun =async ()=> await performCompleteCleanup
+  useEffect(() => {
+    const fun = async () => await performCompleteCleanup;
 
     clearUser();
-      clearToken();
+    clearToken();
     fun();
-  },[])
+  }, []);
 
   // Handle form submission
   const onSubmit = async (data: LoginFormData) => {
@@ -73,14 +72,17 @@ const { clearUser, clearToken } = useUserStore();
         // throw new Error(result.error);
         toast.error(result.error);
       }
-      
+
       toast.success("Login successful");
       reset();
       router.push("/dashboard");
     } catch (error) {
       setError("root", {
         type: "manual",
-        message: error instanceof Error ? error.message : "Login failed. Please check your credentials."
+        message:
+          error instanceof Error
+            ? error.message
+            : "Login failed. Please check your credentials.",
       });
       toast.error("Login failed");
     } finally {
@@ -93,14 +95,12 @@ const { clearUser, clearToken } = useUserStore();
     try {
       setIsLoading(true);
       toast.success(`Signing in with ${provider}`);
-      
+
       const result = await signIn(provider, {
         callbackUrl: "/dashboard",
         redirect: true,
       });
-      
-      
-      
+
       if (result?.error) {
         toast.error(result.error);
       }
@@ -109,7 +109,8 @@ const { clearUser, clearToken } = useUserStore();
       toast.error(`Failed to sign in with ${provider}`);
       setError("root", {
         type: "manual",
-        message: error instanceof Error ? error.message : "Provider login failed"
+        message:
+          error instanceof Error ? error.message : "Provider login failed",
       });
     } finally {
       setIsLoading(false);
@@ -120,15 +121,15 @@ const { clearUser, clearToken } = useUserStore();
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-[#0a0a12] dark:to-[#161622] text-gray-800 dark:text-[#e0e0e0] transition-colors duration-300 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Mobile Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden flex justify-center mb-6"
         >
           <div className="w-16 h-16 relative">
             <Image
-              src="/Logo2.jpg"
-              alt="StudyAI Logo"
+              src="/Logo3.png"
+              alt="TutorMind Logo"
               fill
               className="rounded-full object-cover border-4 border-white dark:border-[#2e2e3a] shadow-md"
             />
@@ -136,7 +137,7 @@ const { clearUser, clearToken } = useUserStore();
         </motion.div>
 
         {/* Login Card */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -147,15 +148,15 @@ const { clearUser, clearToken } = useUserStore();
             <div className="hidden md:flex justify-center mb-4">
               <div className="w-16 h-16 relative">
                 <Image
-                  src="/Logo2.jpg"
-                  alt="StudyAI Logo"
+                  src="/Logo3.png"
+                  alt="TutorMind Logo"
                   fill
                   className="rounded-full object-cover border-4 border-white dark:border-[#2e2e3a] shadow-md"
                 />
               </div>
             </div>
             <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
-              Welcome to StudyAI
+              Welcome to TutorMind
             </h1>
             <p className="text-sm text-gray-500 dark:text-[#8a8a9b] mt-1">
               Sign in to continue your learning journey
@@ -166,7 +167,7 @@ const { clearUser, clearToken } = useUserStore();
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Error Message */}
             {errors.root && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 className="p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-600 dark:text-red-300 rounded-lg flex items-center gap-2 text-sm"
@@ -191,7 +192,7 @@ const { clearUser, clearToken } = useUserStore();
                 <input
                   id="email"
                   type="email"
-                  {...register('email')}
+                  {...register("email")}
                   className={`w-full pl-10 px-4 py-3 bg-gray-50 dark:bg-[#161622] border ${
                     errors.email
                       ? "border-red-500 focus:ring-red-500"
@@ -224,7 +225,7 @@ const { clearUser, clearToken } = useUserStore();
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  {...register('password')}
+                  {...register("password")}
                   className={`w-full pl-10 px-4 py-3 pr-10 bg-gray-50 dark:bg-[#161622] border ${
                     errors.password
                       ? "border-red-500 focus:ring-red-500"
@@ -305,7 +306,7 @@ const { clearUser, clearToken } = useUserStore();
 
             <div className="mt-4 grid grid-cols-2 gap-3">
               <motion.button
-                onClick={() => handleProviderLogin('google')}
+                onClick={() => handleProviderLogin("google")}
                 disabled={isLoading}
                 whileHover={{ y: -2 }}
                 className="inline-flex w-full items-center justify-center rounded-lg border border-gray-200 dark:border-[#2e2e3a] bg-white dark:bg-[#161622] p-3 text-sm font-medium shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-[#2a2a3a] cursor-pointer"
@@ -318,7 +319,7 @@ const { clearUser, clearToken } = useUserStore();
               </motion.button>
 
               <motion.button
-                onClick={() => handleProviderLogin('github')}
+                onClick={() => handleProviderLogin("github")}
                 disabled={isLoading}
                 whileHover={{ y: -2 }}
                 className="inline-flex w-full items-center justify-center rounded-lg border border-gray-200 dark:border-[#2e2e3a] bg-white dark:bg-[#161622] p-3 text-sm font-medium shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-[#2a2a3a] cursor-pointer"

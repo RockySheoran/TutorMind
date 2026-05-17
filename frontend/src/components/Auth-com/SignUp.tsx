@@ -1,52 +1,59 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { 
-  FiEye, 
-  FiEyeOff, 
-  FiEdit2, 
-  FiLoader, 
-  FiMail, 
-  FiLock, 
+import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  FiEye,
+  FiEyeOff,
+  FiEdit2,
+  FiLoader,
+  FiMail,
+  FiLock,
   FiUser,
   FiAlertCircle,
-  FiX
-} from 'react-icons/fi';
-import { FcGoogle } from 'react-icons/fc';
-import { FaGithub } from 'react-icons/fa';
-import { signIn } from 'next-auth/react';
-import axios from 'axios';
-import { api_Signup_url } from '@/lib/apiEnd_Point_Call';
-import { toast } from 'sonner';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { SignUp_Actions } from '@/Actions/Auth/SignUp';
-import { useActionState } from 'react';
+  FiX,
+} from "react-icons/fi";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+import { signIn } from "next-auth/react";
+import axios from "axios";
+import { api_Signup_url } from "@/lib/apiEnd_Point_Call";
+import { toast } from "sonner";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { SignUp_Actions } from "@/Actions/Auth/SignUp";
+import { useActionState } from "react";
 
 // Define Zod schema for form validation
-const signUpSchema = z.object({
-  name: z.string()
-    .min(1, 'Name is required')
-    .max(50, 'Name must be less than 50 characters')
-    .regex(/^[a-zA-Z\s]+$/, 'Name can only contain letters and spaces'),
-  email: z.string()
-    .min(1, 'Email is required')
-    .email('Please enter a valid email address')
-    .toLowerCase(),
-  password: z.string()
-    .min(8, 'Password must be at least 8 characters')
-    .max(50, 'Password must be less than 50 characters')
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Password must contain at least one uppercase letter, one lowercase letter, and one number'),
-  confirmPassword: z.string()
-    .min(1, 'Please confirm your password')
-}).refine(data => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"]
-});
+const signUpSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, "Name is required")
+      .max(50, "Name must be less than 50 characters")
+      .regex(/^[a-zA-Z\s]+$/, "Name can only contain letters and spaces"),
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email("Please enter a valid email address")
+      .toLowerCase(),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(50, "Password must be less than 50 characters")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+      ),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 type SignUpFormData = z.infer<typeof signUpSchema>;
 
@@ -63,7 +70,7 @@ export default function SignupPage() {
       length: password.length >= 8,
       uppercase: /[A-Z]/.test(password),
       lowercase: /[a-z]/.test(password),
-      number: /\d/.test(password)
+      number: /\d/.test(password),
     };
     return checks;
   };
@@ -74,30 +81,30 @@ export default function SignupPage() {
     formState: { errors },
     setError,
     reset,
-    watch
+    watch,
   } = useForm<SignUpFormData>({
-    resolver: zodResolver(signUpSchema)
+    resolver: zodResolver(signUpSchema),
   });
 
   // Handle client-side validation before server action
   const onSubmit = async (data: SignUpFormData) => {
     // Create FormData for server action
     const formData = new FormData();
-    formData.append('name', data.name);
-    formData.append('email', data.email);
-    formData.append('password', data.password);
-    
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+
     // Call server action inside transition
     startTransition(() => {
       formAction(formData);
     });
   };
-const [state, formAction] = useActionState(SignUp_Actions, {
+  const [state, formAction] = useActionState(SignUp_Actions, {
     errors: {},
     message: "",
     status: 0,
-    data: null
-  })
+    data: null,
+  });
 
   useEffect(() => {
     if (state.status === 200) {
@@ -110,15 +117,15 @@ const [state, formAction] = useActionState(SignUp_Actions, {
       // Set form-level error for server errors
       setError("root", {
         type: "manual",
-        message: state.message
+        message: state.message,
       });
     }
-  }, [state, reset, router, setError])
+  }, [state, reset, router, setError]);
 
   // Handle form submission
   // const onSubmit = async (data: SignUpFormData) => {
   //   setIsLoading(true);
-    
+
   //   try {
   //     const response = await axios.post(api_Signup_url, {
   //       name: data.name,
@@ -145,18 +152,17 @@ const [state, formAction] = useActionState(SignUp_Actions, {
   //   }
   // };
 
-  
   // Handle provider login (Google, GitHub, etc.)
   const handleProviderLogin = async (provider: string) => {
     startTransition(async () => {
       try {
         toast.success(`Signing in with ${provider}`);
-        
+
         const result = await signIn(provider, {
           callbackUrl: "/dashboard",
           redirect: false,
         });
-        
+
         if (result?.error) {
           toast.error(result.error);
         } else if (result?.url) {
@@ -174,15 +180,15 @@ const [state, formAction] = useActionState(SignUp_Actions, {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-[#0a0a12] dark:to-[#161622] text-gray-800 dark:text-[#e0e0e0] transition-colors duration-300 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Mobile Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden flex justify-center mb-6"
         >
           <div className="w-16 h-16 relative">
             <Image
-              src="/Logo2.jpg"
-              alt="StudyAI Logo"
+              src="/Logo3.png"
+              alt="TutorMind Logo"
               fill
               className="rounded-full object-cover border-4 border-white dark:border-[#2e2e3a] shadow-md"
             />
@@ -190,7 +196,7 @@ const [state, formAction] = useActionState(SignUp_Actions, {
         </motion.div>
 
         {/* Signup Card */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -201,15 +207,15 @@ const [state, formAction] = useActionState(SignUp_Actions, {
             <div className="hidden md:flex justify-center mb-4">
               <div className="w-16 h-16 relative">
                 <Image
-                  src="/Logo2.jpg"
-                  alt="StudyAI Logo"
+                  src="/Logo3.png"
+                  alt="TutorMind Logo"
                   fill
                   className="rounded-full object-cover border-4 border-white dark:border-[#2e2e3a] shadow-md"
                 />
               </div>
             </div>
             <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
-              Join StudyAI
+              Join TutorMind
             </h1>
             <p className="text-sm text-gray-500 dark:text-[#8a8a9b] mt-1">
               Create your account to start your learning journey
@@ -220,7 +226,7 @@ const [state, formAction] = useActionState(SignUp_Actions, {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Error Message */}
             {errors.root && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 className="p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-600 dark:text-red-300 rounded-lg flex items-center gap-2 text-sm"
@@ -232,7 +238,10 @@ const [state, formAction] = useActionState(SignUp_Actions, {
 
             {/* Name Field */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium mb-1 text-gray-700 dark:text-[#e0e0e0]">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium mb-1 text-gray-700 dark:text-[#e0e0e0]"
+              >
                 Full Name
               </label>
               <div className="relative">
@@ -241,7 +250,7 @@ const [state, formAction] = useActionState(SignUp_Actions, {
                 </div>
                 <input
                   id="name"
-                  {...register('name')}
+                  {...register("name")}
                   className={`w-full pl-10 px-4 py-3 bg-gray-50 dark:bg-[#161622] border ${
                     errors.name
                       ? "border-red-500 focus:ring-red-500"
@@ -261,7 +270,10 @@ const [state, formAction] = useActionState(SignUp_Actions, {
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-1 text-gray-700 dark:text-[#e0e0e0]">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium mb-1 text-gray-700 dark:text-[#e0e0e0]"
+              >
                 Email Address
               </label>
               <div className="relative">
@@ -271,7 +283,7 @@ const [state, formAction] = useActionState(SignUp_Actions, {
                 <input
                   id="email"
                   type="email"
-                  {...register('email')}
+                  {...register("email")}
                   className={`w-full pl-10 px-4 py-3 bg-gray-50 dark:bg-[#161622] border ${
                     errors.email
                       ? "border-red-500 focus:ring-red-500"
@@ -291,7 +303,10 @@ const [state, formAction] = useActionState(SignUp_Actions, {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-1 text-gray-700 dark:text-[#e0e0e0]">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium mb-1 text-gray-700 dark:text-[#e0e0e0]"
+              >
                 Password
               </label>
               <div className="relative">
@@ -301,8 +316,8 @@ const [state, formAction] = useActionState(SignUp_Actions, {
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  {...register('password', {
-                    onChange: (e) => setPasswordValue(e.target.value)
+                  {...register("password", {
+                    onChange: (e) => setPasswordValue(e.target.value),
                   })}
                   className={`w-full pl-10 px-4 py-3 pr-10 bg-gray-50 dark:bg-[#161622] border ${
                     errors.password
@@ -332,23 +347,38 @@ const [state, formAction] = useActionState(SignUp_Actions, {
                   {errors.password.message}
                 </p>
               )}
-              
+
               {/* Password Strength Indicator */}
               {passwordValue && (
                 <div className="mt-2 space-y-1">
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Password requirements:</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    Password requirements:
+                  </p>
                   <div className="space-y-1">
-                    {Object.entries(checkPasswordStrength(passwordValue)).map(([key, isValid]) => (
-                      <div key={key} className="flex items-center gap-2 text-xs">
-                        <div className={`w-2 h-2 rounded-full ${isValid ? 'bg-green-500' : 'bg-gray-300'}`} />
-                        <span className={isValid ? 'text-green-600 dark:text-green-400' : 'text-gray-500'}>
-                          {key === 'length' && 'At least 8 characters'}
-                          {key === 'uppercase' && 'One uppercase letter'}
-                          {key === 'lowercase' && 'One lowercase letter'}
-                          {key === 'number' && 'One number'}
-                        </span>
-                      </div>
-                    ))}
+                    {Object.entries(checkPasswordStrength(passwordValue)).map(
+                      ([key, isValid]) => (
+                        <div
+                          key={key}
+                          className="flex items-center gap-2 text-xs"
+                        >
+                          <div
+                            className={`w-2 h-2 rounded-full ${isValid ? "bg-green-500" : "bg-gray-300"}`}
+                          />
+                          <span
+                            className={
+                              isValid
+                                ? "text-green-600 dark:text-green-400"
+                                : "text-gray-500"
+                            }
+                          >
+                            {key === "length" && "At least 8 characters"}
+                            {key === "uppercase" && "One uppercase letter"}
+                            {key === "lowercase" && "One lowercase letter"}
+                            {key === "number" && "One number"}
+                          </span>
+                        </div>
+                      ),
+                    )}
                   </div>
                 </div>
               )}
@@ -356,7 +386,10 @@ const [state, formAction] = useActionState(SignUp_Actions, {
 
             {/* Confirm Password Field */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1 text-gray-700 dark:text-[#e0e0e0]">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium mb-1 text-gray-700 dark:text-[#e0e0e0]"
+              >
                 Confirm Password
               </label>
               <div className="relative">
@@ -366,7 +399,7 @@ const [state, formAction] = useActionState(SignUp_Actions, {
                 <input
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
-                  {...register('confirmPassword')}
+                  {...register("confirmPassword")}
                   className={`w-full pl-10 px-4 py-3 pr-10 bg-gray-50 dark:bg-[#161622] border ${
                     errors.confirmPassword
                       ? "border-red-500 focus:ring-red-500"
@@ -379,7 +412,9 @@ const [state, formAction] = useActionState(SignUp_Actions, {
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 rounded-md hover:bg-gray-200 dark:hover:bg-[#2e2e3a] transition-colors cursor-pointer"
-                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                  aria-label={
+                    showConfirmPassword ? "Hide password" : "Show password"
+                  }
                   disabled={isPending}
                 >
                   {showConfirmPassword ? (
@@ -434,7 +469,7 @@ const [state, formAction] = useActionState(SignUp_Actions, {
 
             <div className="mt-4 grid grid-cols-2 gap-3">
               <motion.button
-                onClick={() => handleProviderLogin('google')}
+                onClick={() => handleProviderLogin("google")}
                 disabled={isPending}
                 whileHover={{ y: -2 }}
                 className="inline-flex w-full items-center justify-center rounded-lg border border-gray-200 dark:border-[#2e2e3a] bg-white dark:bg-[#161622] p-3 text-sm font-medium shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-[#2a2a3a] cursor-pointer"
@@ -447,7 +482,7 @@ const [state, formAction] = useActionState(SignUp_Actions, {
               </motion.button>
 
               <motion.button
-                onClick={() => handleProviderLogin('github')}
+                onClick={() => handleProviderLogin("github")}
                 disabled={isPending}
                 whileHover={{ y: -2 }}
                 className="inline-flex w-full items-center justify-center rounded-lg border border-gray-200 dark:border-[#2e2e3a] bg-white dark:bg-[#161622] p-3 text-sm font-medium shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-[#2a2a3a] cursor-pointer"

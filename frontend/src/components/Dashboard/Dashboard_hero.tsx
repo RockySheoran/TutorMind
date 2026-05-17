@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useUserStore } from "@/lib/Store/userStore";
 import { motion } from "framer-motion";
 import { FaUser, FaRobot } from "react-icons/fa";
@@ -6,19 +6,19 @@ import RefreshHistoryButton from "./RefreshHistoryButton";
 
 export const Dashboard_hero = () => {
   const { name, email, avatar } = useUserStore();
-  
+
   return (
     <div className=" transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* User Info Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-8 md:p-10 flex flex-col md:flex-row items-center transition-all duration-300 hover:shadow-2xl backdrop-blur-sm"
         >
           {/* Avatar Section */}
-          <motion.div 
+          <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -37,15 +37,15 @@ export const Dashboard_hero = () => {
               </div>
             )}
           </motion.div>
-          
+
           {/* Welcome Text */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
             className="text-center md:text-left flex-1"
           >
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7 }}
@@ -53,7 +53,7 @@ export const Dashboard_hero = () => {
             >
               Hello there! We're always happy to see you ✨
             </motion.p>
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
@@ -61,7 +61,7 @@ export const Dashboard_hero = () => {
             >
               Welcome back, {name || "Valued Learner"}!
             </motion.h1>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.9 }}
@@ -69,8 +69,8 @@ export const Dashboard_hero = () => {
             >
               {email || "Ready to explore new knowledge today?"}
             </motion.p>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1.0 }}
@@ -83,13 +83,15 @@ export const Dashboard_hero = () => {
                 >
                   <FaRobot className="text-indigo-600 dark:text-indigo-400 text-lg mr-3" />
                 </motion.div>
-                <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">StudyAI</span>
+                <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
+                  TutorMind
+                </span>
               </div>
               <p className="text-sm md:text-base text-indigo-700 dark:text-indigo-300 italic font-medium">
-                "Explore the whole new way of studying through StudyAI."
+                "Explore the whole new way of studying through TutorMind."
               </p>
             </motion.div>
-            
+
             {/* Refresh History Button */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
